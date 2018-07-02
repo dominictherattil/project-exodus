@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
+<style>
+
+h1 {
+    color: navy;
+  text-align: center;
+  
+}
+body {
+  background-color:white;
+}
+button {
+  color:red;
+}
+</style>
 <head>
-<title>Work Experiece Game</title>
+<title>Project Exodus</title>
 </head>
 <body>
 
-<h1>Prjoect-Exodus (or Space Man) {Or Shuttle Wreck}</h1>
+<h1 id="header">Prjoect-Exodus (or Space Man)</h1>
 <h2>Desgin Specifaction</h2>
 
 
@@ -34,9 +48,13 @@ Shoots projectiles</p1>
 <h4><b>Score</b></h4>
 <p1>Increases by 1 every x seconds</p1>
 
-<p>
-<button type="button">Hello</button>
 
 
+<p1><input type="Button" value="Blue" onclick="color('#4BD4DE')">
+<script>
+function color(col){
+  document.getElementById("header").style.color=col;
+}
+</script>
 </body>
 </html>

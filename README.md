@@ -27,7 +27,7 @@ Character
 Moves on x and y axis, (wasd)
 
 Score
-Increases by 1 every x seconds
+Increases by 1 every x second(s)
 
 
 

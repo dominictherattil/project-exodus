@@ -43,39 +43,76 @@ window.onload = function(){
     color: "red"
   }
   
+  //var bullets = []
+  var bullet = {
+    active: false,
+    x: 100,
+    y: 100,
+    velocityX: 0.5,
+    size: 10,
+    color: "#0000ff",
+  }
+  bullet.draw = function(ctx){
+    app.ctx.fillStyle = bullet.color;
+    app.ctx.fillRect(bullet.x, bullet.y, bullet.size, bullet.size);
+  }
+  bullet.update = function(elapsed){
+    bullet.x += bullet.velocityX * elapsed
+    if (bullet.x > app.width) {
+      bullet.active = false
+    }
+  }
+  bullet.fire = function(x, y){
+    bullet.x = x
+    bullet.y = y
+    bullet.active = true
+  }
+  
   canvas.addEventListener('keydown', MoveIt, true);
   function MoveIt(e){
     if (e.keyCode == 83){ // key "W"
-          ship.velocity.y = 0
-      ship.velocity.y = ship.velocity.y + 0.210
+      ship.velocity.x = 0
+      ship.velocity.y = 0.30
     }
     if (e.keyCode == 68){ // key "D"
-      ship.velocity.x = 0
-      ship.velocity.x = ship.velocity.x + 0.210
+      ship.velocity.x = 0.30
+      ship.velocity.y = 0
     }
     if (e.keyCode == 87){ // key "S"
-      ship.velocity.y = 0
-      ship.velocity.y = ship.velocity.y - 0.210
+      ship.velocity.x = 0
+      ship.velocity.y = -0.30
     }
     if (e.keyCode == 65){ // key "A"
-      ship.velocity.x = 0
-
-      ship.velocity.x = ship.velocity.x - 0.210
-
+      ship.velocity.x = -0.30
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 32) { // Space
+      bullet.fire(ship.x, ship.y + ship.img.height * 0.5)
     }
   }
   
   // updates all physical things in the scene
   function update(elapsed) {
-    r.x += r.velocity.x * elapsed
-    r.y += r.velocity.y * elapsed
-    ship.x += ship.velocity.x * elapsed
-    ship.y += ship.velocity.y * elapsed
     if (r.x < 0 || r.x > app.width) {
       r.velocity.x *= -1
     }
     if (r.y < 0 || r.y > app.height) {
       r.velocity.y *= -1
+    }
+    r.x += r.velocity.x * elapsed
+    r.y += r.velocity.y * elapsed
+    
+    if (ship.x < 0 || ship.x > app.width) {
+      ship.velocity.x *= -1
+    }
+    if (ship.y < 0 || ship.y > app.height) {
+      ship.velocity.y *= -1
+    }
+    ship.x += ship.velocity.x * elapsed
+    ship.y += ship.velocity.y * elapsed
+    
+    if (bullet.active) {
+      bullet.update(elapsed)
     }
   }
   
@@ -88,8 +125,13 @@ window.onload = function(){
     app.ctx.drawImage(ship.img, ship.x, ship.y);
     
     // theFlyingRect
-    app.ctx.fillColor = r.color;
+    app.ctx.fillStyle = r.color;
     app.ctx.fillRect(r.x, r.y, r.size.width, r.size.height);
+    
+    // bullet
+    if (bullet.active == true) {
+      bullet.draw(app.ctx)
+    }
     
     // enemies
     // todo

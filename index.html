@@ -3,15 +3,30 @@
 <style>
 
 h1 {
-    color: navy;
+    color: white;
   text-align: center;
+  font-family:'Courier', monospace;
   
 }
+h4{
+  color: white;
+}
+p1{
+  color:white;
+}
 body {
-  background-color:white;
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAxA3FbEWqrYZJVB9KFBfV2ZNotEr-6tuSrV6QrumlI5oVIMi-")
 }
 button {
   color:red;
+}
+#box {
+    background-color: red;
+    height: 50px;
+    left: 150px;
+    position: absolute;
+    top: 10px;
+    width: 50px;
 }
 </style>
 <head>
@@ -23,7 +38,7 @@ button {
 <h2>Desgin Specifaction</h2>
 
 
-<h4>Objective</h4>
+<h4 id="header2">Objective</h4>
 <p1>Get a higher score
 Collect Coins add to score or when you reach x coins you are immune to object</p1>
 
@@ -50,11 +65,63 @@ Shoots projectiles</p1>
 
 
 
-<p1><input type="Button" value="Blue" onclick="color('#4BD4DE')">
+<p><input type="Button" value="Random" onclick="randomColor('header')"></p>
+<div id="box"></div>
+
 <script>
-function color(col){
-  document.getElementById("header").style.color=col;
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
+
+function randomColor(item) {
+  document.getElementById(item).style.color=getRandomColor();
+}
+
+function color(col,item){
+  document.getElementById(item).style.color=col;
+}
+
+
+var box = document.getElementById('box'), // the box
+    boxPos = 40, // the box's position
+    boxVelocity = 2, // the box's velocity
+    limit = 1200; // how far the box can go before it switches direction
+ 
+function draw() {
+    box.style.left = boxPos + 'px';
+}
+
+function update() {
+    boxPos += boxVelocity;
+    // Switch directions if we go too far
+    if (boxPos >= limit || boxPos <= 0) boxVelocity = -boxVelocity;
+}
+
+var lastFrameTimeMs = 0, // The last time the loop was run
+    maxFPS = 600; // The maximum FPS we want to allow
+ 
+function mainLoop(timestamp) {
+    // Throttle the frame rate.
+    if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
+        requestAnimationFrame(mainLoop);
+        return;
+    }
+    lastFrameTimeMs = timestamp;
+ 
+    update();
+    draw();
+    requestAnimationFrame(mainLoop);
+
+    // ...
+}
+requestAnimationFrame(mainLoop);
+
+
 </script>
 </body>
 </html>

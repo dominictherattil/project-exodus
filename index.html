@@ -22,14 +22,18 @@ window.onload = function(){
   var ship = {
     x : 100,
     y: 100,
-    img: document.getElementById("ship")
+    img: document.getElementById("ship"),
+    velocity: {
+      x: 0.0,
+      y: 0.0,
+    }
   }
   
   var r = {
     x: 0,
     y: 0,
     velocity: {
-      x: 0.09,
+      x: 0.02,
       y: 0.07,
     },
     size: {
@@ -42,16 +46,22 @@ window.onload = function(){
   canvas.addEventListener('keydown', MoveIt, true);
   function MoveIt(e){
     if (e.keyCode == 83){ // key "W"
-      ship.y = ship.y + 10
+          ship.velocity.y = 0
+      ship.velocity.y = ship.velocity.y + 0.210
     }
     if (e.keyCode == 68){ // key "D"
-      ship.x = ship.x + 10
+      ship.velocity.x = 0
+      ship.velocity.x = ship.velocity.x + 0.210
     }
     if (e.keyCode == 87){ // key "S"
-      ship.y = ship.y - 10
+      ship.velocity.y = 0
+      ship.velocity.y = ship.velocity.y - 0.210
     }
     if (e.keyCode == 65){ // key "A"
-      ship.x = ship.x -10
+      ship.velocity.x = 0
+
+      ship.velocity.x = ship.velocity.x - 0.210
+
     }
   }
   
@@ -59,7 +69,8 @@ window.onload = function(){
   function update(elapsed) {
     r.x += r.velocity.x * elapsed
     r.y += r.velocity.y * elapsed
-    
+    ship.x += ship.velocity.x * elapsed
+    ship.y += ship.velocity.y * elapsed
     if (r.x < 0 || r.x > app.width) {
       r.velocity.x *= -1
     }

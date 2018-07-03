@@ -1,60 +1,110 @@
 <!DOCTYPE html>
 <html>
-<style>
-
-h1 {
-    color: navy;
-  text-align: center;
+  <head>
+  <title>Exodus</title>
+  </head>
+  <body>
+    <script>
+window.onload = function(){
   
+  var app = {
+    start: Date.now(),
+    ctx: null, // will set later
+    width: null, // will set later
+    height: null, // will set later
+  }
+
+  var canvas = document.getElementById("c");
+  app.ctx = canvas.getContext("2d");
+  app.width = canvas.width;
+  app.height = canvas.height;
+
+  var ship = {
+    x : 100,
+    y: 100,
+    img: document.getElementById("ship")
+  }
+  
+  var r = {
+    x: 0,
+    y: 0,
+    velocity: {
+      x: 0.09,
+      y: 0.07,
+    },
+    size: {
+      width: 50,
+      height: 20,
+    },
+    color: "red"
+  }
+  
+  canvas.addEventListener('keydown', MoveIt, true);
+  function MoveIt(e){
+    if (e.keyCode == 83){ // key "W"
+      ship.y = ship.y + 10
+    }
+    if (e.keyCode == 68){ // key "D"
+      ship.x = ship.x + 10
+    }
+    if (e.keyCode == 87){ // key "S"
+      ship.y = ship.y - 10
+    }
+    if (e.keyCode == 65){ // key "A"
+      ship.x = ship.x -10
+    }
+  }
+  
+  // updates all physical things in the scene
+  function update(elapsed) {
+    r.x += r.velocity.x * elapsed
+    r.y += r.velocity.y * elapsed
+    
+    if (r.x < 0 || r.x > app.width) {
+      r.velocity.x *= -1
+    }
+    if (r.y < 0 || r.y > app.height) {
+      r.velocity.y *= -1
+    }
+  }
+  
+  // draws all the objects present in the scene in their respective places
+  function redraw() {
+    // clear
+    app.ctx.clearRect(0,0,canvas.width,canvas.height);
+    
+    // ship
+    app.ctx.drawImage(ship.img, ship.x, ship.y);
+    
+    // theFlyingRect
+    app.ctx.fillColor = r.color;
+    app.ctx.fillRect(r.x, r.y, r.size.width, r.size.height);
+    
+    // enemies
+    // todo
+    // obstacles
+    // todo
+  }
+  
+  function loop() {
+    var now = Date.now();
+    var elapsed = now - app.start;
+    app.start = now;
+
+    update(elapsed)
+    
+    redraw()
+
+    requestAnimationFrame(loop);
+  }
+
+  // Kick off the Game Loop
+  requestAnimationFrame(loop);
 }
-body {
-  background-color:white;
-}
-button {
-  color:red;
-}
-</style>
-<head>
-<title>Project Exodus</title>
-</head>
-<body>
 
-<h1 id="header">Prjoect-Exodus (or Space Man)</h1>
-<h2>Desgin Specifaction</h2>
-
-
-<h4>Objective</h4>
-<p1>Get a higher score
-Collect Coins add to score or when you reach x coins you are immune to object</p1>
-
-<h4><b>Scene</b></h4>
-<p1>Moves left on the x axis, scene gradually accelerates as the score increases
-If you reach end of the scene you die
-If you reach frond of the scene you propelled backwards</p1>
-
-<h4><b>Enemies</b></h4>
-<p1>Surrounded by asteroid field
-Randomly generated
-
-Avoid black holes
-Pulls you in
-
-Alien paladin
-Shoots projectiles</p1>
-
-<h4><b>Character</b></h4>
-<p1>Moves on x and y axis, (wasd)</p1>
-
-<h4><b>Score</b></h4>
-<p1>Increases by 1 every x seconds</p1>
-
-
-
-<p1><input type="Button" value="Blue" onclick="color('#4BD4DE')">
-<script>
-function color(col){
-  document.getElementById("header").style.color=col;
-}
-</script>
-</body>
+    </script>
+<img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
+<canvas ID="c" width="800" height="500" tabindex="1">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  </body>
 </html>

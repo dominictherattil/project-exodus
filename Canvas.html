@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<style>
+body{
+  //background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAxA3FbEWqrYZJVB9KFBfV2ZNotEr-6tuSrV6QrumlI5oVIMi-");
+}
+#box {
+    background-color: red;
+    height: 50px;
+    left: 150px;
+    position: absolute;
+    top: 10px;
+    width: 50px;
+}
+
+</style>
+<head>
+<title>Project Exodus</title>
+<script>
+window.onload = function(){
+  var box = document.getElementById('box'), // the box
+    boxPos = 40, // the box's position
+    boxVelocity = 2, // the box's velocity
+    limit = 1200; // how far the box can go before it switches direction
+ 
+  function draw() {
+    box.style.left = boxPos + 'px';
+}
+
+  function update() {
+    boxPos += boxVelocity;
+    // Switch directions if we go too far
+    if (boxPos >= limit || boxPos <= 0) boxVelocity = -boxVelocity;
+}
+
+  var lastFrameTimeMs = 0, // The last time the loop was run
+    maxFPS = 10; // The maximum FPS we want to allow
+ 
+  function mainLoop(timestamp) {
+    // Throttle the frame rate.
+    if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
+        requestAnimationFrame(mainLoop);
+        return;
+    }
+    lastFrameTimeMs = timestamp;
+ 
+    update();
+    draw();
+    requestAnimationFrame(mainLoop);
+    // ...
+}
+  requestAnimationFrame(mainLoop);
+
+  var canvas = document.getElementById("c");
+  ctx = canvas.getContext("2d");
+  var img = document.getElementById("ship")
+  ctx.drawImage(ship,100,100);
+  canvas.addEventListener('keydown', MoveIt, true);
+
+
+  
+  var x = 100;
+  var y = 100;
+  
+  function MoveIt(e){
+    if (e.keyCode == 83){
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      y= y+10
+      ctx.drawImage(ship,x,y)
+    }
+    if (e.keyCode == 68){
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      x= x+10
+      ctx.drawImage(ship,x,y)
+      }
+    if (e.keyCode == 87){
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      y= y-10
+      ctx.drawImage(ship,x,y)
+      }
+    if (e.keyCode == 65){
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      x= x-10
+      ctx.drawImage(ship,x,y)
+    }
+  }
+}
+
+
+</script>
+
+</head>
+<body>
+<img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
+<canvas ID="c" width="800" height="500" tabindex="1">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<script>
+
+
+
+</script>
+
+</body>
+</html>

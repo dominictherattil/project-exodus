@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <style>
-  body{
-    background-image: url("https://78.media.tumblr.com/90d14bc3c54a3daabd04bc8e61cc295a/tumblr_inline_n258ovpRe81qhwjx8.gif");
+  /*body{
+    background-image: url("https://78.media.tumblr.com/90d14bc3c54a3daabd04bc8e61cc295a/tumblr_inline_n258ovpRe81qhwjx8.gif");*/
   }
   </style>
   <head>
@@ -18,7 +18,7 @@ window.onload = function(){
     width: null, // will set later
     height: null, // will set later
   }
-
+  var score = 0
   var canvas = document.getElementById("c");
   app.ctx = canvas.getContext("2d");
   app.width = canvas.width;
@@ -50,7 +50,6 @@ window.onload = function(){
       width: 50,
       height: 20,
     },
-    color: "red"
   }
   
   //var bullets = []
@@ -119,6 +118,18 @@ window.onload = function(){
     }
     
   }
+  function scoreUpdate(){
+    if (r.active == false){
+      score = score +1
+      r.active = true
+      r.x = 700
+      r.y = 300
+    }
+  }
+  function scoreDraw(){
+    app.ctx.font = "30px Arial";
+    app.ctx.fillText(score, 400, 50);
+  }
   canvas.addEventListener('keydown', MoveIt, true);
   
   function MoveIt(e){
@@ -142,6 +153,7 @@ window.onload = function(){
       bullet.fire(ship.x, ship.y + ship.img.height * 0.5)
     }
   }
+  
   CollisionDetection = function(){
     var ChangeY = ship.y-r.y;
     var ChangeX = ship.x-r.x;
@@ -158,6 +170,7 @@ window.onload = function(){
       ship.active = false
     }
   }
+
   // updates all physical things in the scene
   function update(elapsed) {
     CollisionDetection()
@@ -170,6 +183,7 @@ window.onload = function(){
     if (bullet.active) {
       bullet.update(elapsed)
     }
+    scoreUpdate();
   }
 
 
@@ -192,11 +206,15 @@ window.onload = function(){
       bullet.draw(app.ctx)
     }
     
+    //score
+    scoreDraw();
+    }
+    
     // enemies
     // todo
     // obstacles
     // todo
-  }
+  
   
   function loop() {
     var now = Date.now();

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <style>
-  /*body{
-    background-image: url("https://78.media.tumblr.com/90d14bc3c54a3daabd04bc8e61cc295a/tumblr_inline_n258ovpRe81qhwjx8.gif");*/
+  body{
+    background-image: url("https://78.media.tumblr.com/90d14bc3c54a3daabd04bc8e61cc295a/tumblr_inline_n258ovpRe81qhwjx8.gif");
   }
   </style>
   <head>
@@ -23,6 +23,7 @@ window.onload = function(){
   app.ctx = canvas.getContext("2d");
   app.width = canvas.width;
   app.height = canvas.height;
+
   var ship = {
     active: true,
     x : 100,
@@ -35,67 +36,6 @@ window.onload = function(){
       y: 0.0,
     }
   }
-  
-  
-  
-  // Random within a range function usage = getRandomArbitrary(Value_Min, Value_max)
-  //
-  function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-  // Random from O to a number usage = getRandomInt(value)
-  //
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
-  
-  
-  // This the Y Cord
-  console.log(getRandomArbitrary(600,800));
-  // This the X Cord
-  console.log(getRandomInt(500));
-
-
-  //Wait x seconds function
-  //sleep wait function usage = sleep(xx)
-    function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-        }
-      }
-    }
-  //
-
-  // Jitter class
-  class asteroid {
-    constructor(){
-    this.x = getRandomArbitrary(600,800);
-    this.y = (getRandomInt(500));
-    this.Vx = getRandomArbitrary(-0.1,-0.3);
-    }
-  }
-  
-  asteroid0 = new asteroid()
-  console.log(asteroid0)
-  asteroid1  = new asteroid()
-  console.log(asteroid1)
-  asteroid2 = new asteroid()
-  console.log(asteroid2)
-  asteroid3 = new asteroid()
-  console.log(asteroid3)
-  asteroid4 = new asteroid()
-  asteroid5 = new asteroid()
-  asteroid6 = new asteroid()
-  asteroid7 = new asteroid()
-  asteroid8 = new asteroid()
-  asteroid9 = new asteroid()
-  
-  
-  
-  
-  
   
   var r = {
     img: document.getElementById("ast"),
@@ -163,6 +103,7 @@ window.onload = function(){
   ship.update = function(elapsed){
     ship.x += ship.velocity.x * elapsed
     ship.y += ship.velocity.y * elapsed
+
     if (ship.x + ship.width > app.width){
       ship.x = app.width - ship.width
     }
@@ -175,17 +116,29 @@ window.onload = function(){
     if (ship.y < 0){
       ship.y = 0
     }
-    
+
   }
   function scoreUpdate(){
     if (r.active == false){
       score = score +1
       r.active = true
-      r.x = 700
-      r.y = 300
+      r.x = getRandomArbitrary(600,700)
+      r.y = getRandomInt(500)
     }
   }
+// Random within a range function usage = getRandomArbitrary(Value_Min, Value_max)
+  //
+  function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  // Random from O to a number usage = getRandomInt(value)
+  //
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+  
   function scoreDraw(){
+    app.ctx.fillStyle = "white";
     app.ctx.font = "30px Arial";
     app.ctx.fillText(score, 400, 50);
   }
@@ -229,8 +182,12 @@ window.onload = function(){
       ship.active = false
     }
   }
+
   // updates all physical things in the scene
   function update(elapsed) {
+    if (ship.active == false){
+      alert("GAME OVER")
+    }
     CollisionDetection()
     if (r.active == true){
       r.update(elapsed)
@@ -243,6 +200,9 @@ window.onload = function(){
     }
     scoreUpdate();
   }
+
+
+
   // draws all the objects present in the scene in their respective places
   function redraw() {
     // clear
@@ -275,14 +235,18 @@ window.onload = function(){
     var now = Date.now();
     var elapsed = now - app.start;
     app.start = now;
+
     update(elapsed)
     
     redraw()
+
     requestAnimationFrame(loop);
   }
+
   // Kick off the Game Loop
   requestAnimationFrame(loop);
 }
+
     </script>
 <img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
 <img id="ast" src="asteroid3.png" width="0" height="0">

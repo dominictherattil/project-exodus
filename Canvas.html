@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Exodus</title>
+  </head>
+  <body>
+    <script>
+window.onload = function(){
+  
+  var app = {
+    start: Date.now(),
+    ctx: null, // will set later
+    width: null, // will set later
+    height: null, // will set later
+  }
+
+  var canvas = document.getElementById("c");
+  app.ctx = canvas.getContext("2d");
+  app.width = canvas.width;
+  app.height = canvas.height;
+
+  var ship = {
+    x : 100,
+    y: 100,
+    width: 119,
+    height: 83,
+    img: document.getElementById("ship"),
+    velocity: {
+      x: 0.0,
+      y: 0.0,
+    }
+  }
+  
+  var r = {
+    active: true,
+    x: 700,
+    y: 5,
+    velocity: {
+      x: -0.3,
+      y: 0.0,
+    },
+    size: {
+      width: 50,
+      height: 20,
+    },
+    color: "red"
+  }
+  
+  //var bullets = []
+  var bullet = {
+    active: false,
+    x: 100,
+    y: 100,
+    velocityX: 0.5,
+    size: 10,
+    color: "#0000ff",
+  }
+  bullet.draw = function(ctx){
+    app.ctx.fillStyle = bullet.color;
+    app.ctx.fillRect(bullet.x, bullet.y, bullet.size, bullet.size);
+  }
+  bullet.update = function(elapsed){
+    bullet.x += bullet.velocityX * elapsed
+    if (bullet.x > app.width) {
+      bullet.active = false
+    }
+  }
+  bullet.fire = function(x, y){
+    bullet.x = x
+    bullet.y = y
+    bullet.active = true
+  }
+  r.draw = function(ctx){
+    app.ctx.fillStyle = r.color;
+    app.ctx.fillRect(r.x, r.y, r.size.width, r.size.height)
+  }
+  r.update = function(elapsed){
+    if (r.x < 0) {
+      r.active = false
+    }
+    if (r.x > app.width){
+      r.active = false
+    }
+    if (r.y < 0 || r.y > app.height) {
+      r.velocity.y *= -1
+    }
+    r.x += r.velocity.x * elapsed
+    r.y += r.velocity.y * elapsed
+    
+  }
+  canvas.addEventListener('keydown', MoveIt, true);
+  
+  function MoveIt(e){
+    if (e.keyCode == 83){ // key "W"
+      ship.velocity.x = 0
+      ship.velocity.y = 0.3
+    }
+    if (e.keyCode == 68){ // key "D"
+      ship.velocity.x = 0.30
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 87){ // key "S"
+      ship.velocity.x = 0
+      ship.velocity.y = -0.3
+    }
+    if (e.keyCode == 65){ // key "A"
+      ship.velocity.x = -0.30
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 32) { // Space
+      bullet.fire(ship.x, ship.y + ship.img.height * 0.5)
+    }
+  }
+  
+  // updates all physical things in the scene
+  function update(elapsed) {
+    if (r.active == true){
+      r.update(elapsed)
+    }
+
+    ship.x += ship.velocity.x * elapsed
+    ship.y += ship.velocity.y * elapsed
+
+    if (ship.x + ship.width > app.width){
+      ship.x = app.width - ship.width
+    }
+    if (ship.y + ship.height > app.height){
+      ship.y = app.height - ship.height
+    }
+    if (ship.x < 0){
+      ship.x = 0
+    }
+    if (ship.y < 0){
+      ship.y = 0
+    }
+    
+    if (bullet.active) {
+      bullet.update(elapsed)
+    }
+  }
+  
+  // draws all the objects present in the scene in their respective places
+  function redraw() {
+    // clear
+    app.ctx.clearRect(0,0,canvas.width,canvas.height);
+    
+    // ship
+    app.ctx.drawImage(ship.img, ship.x, ship.y);
+    
+    // theFlyingRect
+    if (r.active == true){
+      r.draw(app.ctx)
+    }
+    // bullet
+    if (bullet.active == true) {
+      bullet.draw(app.ctx)
+    }
+    
+    // enemies
+    // todo
+    // obstacles
+    // todo
+  }
+  
+  function loop() {
+    var now = Date.now();
+    var elapsed = now - app.start;
+    app.start = now;
+
+    update(elapsed)
+    
+    redraw()
+
+    requestAnimationFrame(loop);
+  }
+  console.log(r.x);
+
+  // Kick off the Game Loop
+  requestAnimationFrame(loop);
+}
+
+    </script>
+<img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
+<canvas ID="c" width="800" height="500" tabindex="1">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  </body>
+</html>

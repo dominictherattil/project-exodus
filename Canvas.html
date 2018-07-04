@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html>
+  <style>
+  body{
+    background-image: url("https://78.media.tumblr.com/90d14bc3c54a3daabd04bc8e61cc295a/tumblr_inline_n258ovpRe81qhwjx8.gif");
+  }
+  </style>
   <head>
   <title>Exodus</title>
   </head>
@@ -20,6 +25,7 @@ window.onload = function(){
   app.height = canvas.height;
 
   var ship = {
+    active: true,
     x : 100,
     y: 100,
     width: 119,
@@ -32,9 +38,10 @@ window.onload = function(){
   }
   
   var r = {
+    img: document.getElementById("ast"),
     active: true,
     x: 700,
-    y: 5,
+    y: 200,
     velocity: {
       x: -0.3,
       y: 0.0,
@@ -71,21 +78,45 @@ window.onload = function(){
     bullet.active = true
   }
   r.draw = function(ctx){
-    app.ctx.fillStyle = r.color;
-    app.ctx.fillRect(r.x, r.y, r.size.width, r.size.height)
+    app.ctx.drawImage(r.img,r.x,r.y)
   }
   r.update = function(elapsed){
     if (r.x < 0) {
       r.active = false
+      r.x = 1000
+      r.y = 1000
     }
     if (r.x > app.width){
       r.active = false
+      r.x = 1000
+      r.y = 1000
     }
     if (r.y < 0 || r.y > app.height) {
       r.velocity.y *= -1
     }
     r.x += r.velocity.x * elapsed
     r.y += r.velocity.y * elapsed
+    
+  }
+  ship.draw = function(ctx){
+    app.ctx.drawImage(ship.img, ship.x, ship.y);
+  }
+  ship.update = function(elapsed){
+    ship.x += ship.velocity.x * elapsed
+    ship.y += ship.velocity.y * elapsed
+
+    if (ship.x + ship.width > app.width){
+      ship.x = app.width - ship.width
+    }
+    if (ship.y + ship.height > app.height){
+      ship.y = app.height - ship.height
+    }
+    if (ship.x < 0){
+      ship.x = 0
+    }
+    if (ship.y < 0){
+      ship.y = 0
+    }
     
   }
   canvas.addEventListener('keydown', MoveIt, true);
@@ -111,42 +142,47 @@ window.onload = function(){
       bullet.fire(ship.x, ship.y + ship.img.height * 0.5)
     }
   }
-  
+  CollisionDetection = function(){
+    var ChangeY = ship.y-r.y;
+    var ChangeX = ship.x-r.x;
+    if (ChangeY < 0){
+      ChangeY *= -1
+    }
+    if (ChangeX < 0){
+      ChangeX *= -1
+    }
+    var ChangeY2 = ChangeY*ChangeY;
+    var ChangeX2 = ChangeX*ChangeX;
+    var distance = Math.sqrt(ChangeY2 + ChangeX2);
+    if (distance < 70){
+      ship.active = false
+    }
+  }
   // updates all physical things in the scene
   function update(elapsed) {
+    CollisionDetection()
     if (r.active == true){
       r.update(elapsed)
     }
-
-    ship.x += ship.velocity.x * elapsed
-    ship.y += ship.velocity.y * elapsed
-
-    if (ship.x + ship.width > app.width){
-      ship.x = app.width - ship.width
+    if (ship.active == true){
+      ship.update(elapsed)
     }
-    if (ship.y + ship.height > app.height){
-      ship.y = app.height - ship.height
-    }
-    if (ship.x < 0){
-      ship.x = 0
-    }
-    if (ship.y < 0){
-      ship.y = 0
-    }
-    
     if (bullet.active) {
       bullet.update(elapsed)
     }
   }
-  
+
+
+
   // draws all the objects present in the scene in their respective places
   function redraw() {
     // clear
     app.ctx.clearRect(0,0,canvas.width,canvas.height);
     
     // ship
-    app.ctx.drawImage(ship.img, ship.x, ship.y);
-    
+    if (ship.active == true){
+      ship.draw(app.ctx)
+    }
     // theFlyingRect
     if (r.active == true){
       r.draw(app.ctx)
@@ -173,7 +209,6 @@ window.onload = function(){
 
     requestAnimationFrame(loop);
   }
-  console.log(r.x);
 
   // Kick off the Game Loop
   requestAnimationFrame(loop);
@@ -181,6 +216,7 @@ window.onload = function(){
 
     </script>
 <img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
+<img id="ast" src="asteroid3.png" width="0" height="0">
 <canvas ID="c" width="800" height="500" tabindex="1">
 Your browser does not support the HTML5 canvas tag.</canvas>
   </body>

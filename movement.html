@@ -1,0 +1,43 @@
+// KEY DOWN MOVEMENT
+  canvas.addEventListener('keydown', MoveIt, true);
+  function MoveIt(e){
+    if (e.keyCode == 83){ // key "W"
+      ship.velocity.x = 0
+      ship.velocity.y = 0.3
+    }
+    if (e.keyCode == 68){ // key "D"
+      ship.velocity.x = 0.30
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 87){ // key "S"
+      ship.velocity.x = 0
+      ship.velocity.y = -0.3
+    }
+    if (e.keyCode == 65){ // key "A"
+      ship.velocity.x = -0.30
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 32) { // Space
+      bullet.fire(ship.x, ship.y + ship.img.height * 0.5)
+    }
+  }
+  //KEY UP NO MOVEMENT
+  canvas.addEventListener('keyup', MoveItnt, true);
+    function MoveItnt(e){
+    if (e.keyCode == 83){ // key "W"
+      ship.velocity.x = 0
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 68){ // key "D"
+      ship.velocity.x = 0.
+      ship.velocity.y = 0
+    }
+    if (e.keyCode == 87){ // key "S"
+      ship.velocity.x = 0
+      ship.velocity.y = -0
+    }
+    if (e.keyCode == 65){ // key "A"
+      ship.velocity.x = -0
+      ship.velocity.y = 0
+    }
+  }

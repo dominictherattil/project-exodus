@@ -43,12 +43,10 @@
     }
   }
   
-
   // Random within a range function usage = getRandomArbitrary(Value_Min, Value_max)
   function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
   }
-
   // Random from O to a number usage = getRandomInt(value)
   function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -58,7 +56,6 @@
   console.log(getRandomArbitrary(600,800));
   // This the Y Cord
   console.log(getRandomInt(500));
-
   //sleep wait function usage = sleep(xx)
     function sleep(milliseconds) {
     var start = new Date().getTime();
@@ -68,7 +65,6 @@
         }
       }
     }
-
   // Asteroid class
   class asteroid {
     constructor(){
@@ -201,14 +197,15 @@
       ship.update(elapsed)
     }
     if (ship.active == false){
-      alert("Game Over! Your Score is "+score)
+      //alert("Game Over! Your Score is "+score)
+      if(!alert("Game Over! Your Score is "+ score +" Press OK to play again")){window.location.reload();}
+      app.ctx.fillRect();
     }
     
     if (bullet.active) {
       bullet.update(elapsed)
     }
     scoreUpdate();
-
     //Ship Movement Controls
     if (ship.keys[87]) { //S
         if (ship.velocity.y > -ship.speed) {
@@ -231,7 +228,6 @@
             ship.velocity.x--;
         }
     }
-
     ship.velocity.y *= ship.friction;
     ship.y += ship.velocity.y;
     
@@ -285,8 +281,8 @@
   requestAnimationFrame(loop);
 }
     </script>
-<img id="ship" src="lighter_copy.png" width ="0" height = "0" rotate="90">
-<img id="ast" src="asteroid3.png" width="0" height="0">
+<img id="ship" src="https://github.com/dominictherattil/project-exodus/blob/master/lighter_copy.png?raw=true" width ="0" height = "0" rotate="90">
+<img id="ast" src="https://github.com/dominictherattil/project-exodus/blob/master/asteroid3.png?raw=true" width="0" height="0">
 <canvas ID="c" width="800" height="500" tabindex="1">
 Your browser does not support the HTML5 canvas tag.</canvas>
   </body>
